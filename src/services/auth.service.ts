@@ -4,47 +4,60 @@ import axiosInstance from "@/api/axios";
 import { API_ENDPOINTS } from "@/constants/api";
 import {
   AuthResponse,
+  RegisterResponse,
   ForgotPasswordRequest,
   LoginRequest,
   RegisterRequest,
   ResetPasswordRequest,
   VerifyEmailRequest,
+  VerifyEmailResponse,
 } from "@/types/auth";
 
 export const authService = {
-  register: async (data: RegisterRequest) => {
-    const response = await axiosInstance.post(
-      API_ENDPOINTS.AUTH.REGISTER,
-      data
-    );
-
+  register: async (
+    data: RegisterRequest
+  ): Promise<RegisterResponse> => {
+    const response =
+      await axiosInstance.post<RegisterResponse>(
+        API_ENDPOINTS.AUTH.REGISTER,
+        data
+      );
+  
+    return response.data;
+  },
+  verifyEmail: async (
+    data: VerifyEmailRequest
+  ): Promise<VerifyEmailResponse> => {
+    const response =
+      await axiosInstance.post<VerifyEmailResponse>(
+        API_ENDPOINTS.AUTH.VERIFY_EMAIL,
+        data
+      );
+  
+    return response.data;
+  },
+  
+  resendOtp: async (
+    email: string
+  ): Promise<{ message: string }> => {
+    const response =
+      await axiosInstance.post<{ message: string }>(
+        API_ENDPOINTS.AUTH.RESEND_OTP,
+        { email }
+      );
+  
     return response.data;
   },
 
-  verifyEmail: async (data: VerifyEmailRequest) => {
-    const response = await axiosInstance.post(
-      API_ENDPOINTS.AUTH.VERIFY_EMAIL,
-      data
-    );
 
-    return response.data;
-  },
 
-  resendOtp: async (email: string) => {
-    const response = await axiosInstance.post(
-      API_ENDPOINTS.AUTH.RESEND_OTP,
-      { email }
-    );
-
-    return response.data;
-  },
 
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await axiosInstance.post(
+    const response = await axiosInstance.post<AuthResponse>(
       API_ENDPOINTS.AUTH.LOGIN,
       data
     );
-
+  
     return response.data;
   },
 

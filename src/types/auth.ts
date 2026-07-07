@@ -9,10 +9,19 @@ export interface User {
     email: string;
     password: string;
   }
+
+  export interface RegisterResponse {
+    message: string;
+    email: string;
+    verificationRequired: boolean;
+  }
   
   export interface VerifyEmailRequest {
     email: string;
     otp: string;
+  }
+  export interface VerifyEmailResponse {
+    message: string;
   }
   
   export interface LoginRequest {
