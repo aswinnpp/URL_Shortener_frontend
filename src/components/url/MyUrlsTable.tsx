@@ -31,6 +31,9 @@ export default function MyUrlsTable() {
     loading,
     refetch,
   } = useMyUrls();
+console.log(
+  'ss',urls
+);
 
   const copy = async (shortUrl: string) => {
     await navigator.clipboard.writeText(shortUrl);
@@ -62,6 +65,7 @@ export default function MyUrlsTable() {
   }
 
   return (
+    <div className="mx-auto max-w-6xl">
     <Card className="shadow-sm">
       <CardHeader>
         <CardTitle>My URLs</CardTitle>
@@ -87,7 +91,6 @@ export default function MyUrlsTable() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Original URL</TableHead>
 
                   <TableHead>Short URL</TableHead>
 
@@ -111,9 +114,7 @@ export default function MyUrlsTable() {
                     key={url.id}
                     className="hover:bg-muted/50 transition-colors"
                   >
-                    <TableCell className="max-w-sm truncate font-medium">
-                      {url.originalUrl}
-                    </TableCell>
+                    
 
                     <TableCell>
                       <a
@@ -147,15 +148,7 @@ export default function MyUrlsTable() {
 
                     <TableCell>
                       <div className="flex justify-end gap-2">
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          onClick={() =>
-                            copy(url.shortUrl)
-                          }
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
+                       
 
                         <DeleteDialog
                           title="Delete URL"
@@ -171,6 +164,16 @@ export default function MyUrlsTable() {
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </DeleteDialog>
+
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          onClick={() =>
+                            copy(url.shortUrl)
+                          }
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -181,5 +184,6 @@ export default function MyUrlsTable() {
         )}
       </CardContent>
     </Card>
+    </div>
   );
 }
