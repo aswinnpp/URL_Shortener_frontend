@@ -12,7 +12,6 @@ import PublicRoute from "./PublicRoute";
 
 import DashboardLayout from "@/layouts/DashboardLayout";
 
-import CreateUrl from "@/pages/Url/CreateUrl";
 import MyUrls from "@/pages/Url/MyUrls";
 
 export const router = createBrowserRouter([
@@ -52,10 +51,7 @@ export const router = createBrowserRouter([
         path: "/dashboard",
         element: <Dashboard />,
       },
-      {
-        path: "/dashboard/create",
-        element: <CreateUrl />,
-      },
+      
       {
         path: "/dashboard/my-urls",
         element: <MyUrls />,

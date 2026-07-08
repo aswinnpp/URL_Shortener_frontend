@@ -30,7 +30,7 @@ export default function Dashboard() {
         </h1>
 
         <p className="text-gray-500">
-          Welcome back 👋
+          Welcome back 
         </p>
       </div>
 

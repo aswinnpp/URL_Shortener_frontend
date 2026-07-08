@@ -21,11 +21,7 @@ const menus = [
     icon: Home,
     path: "/dashboard",
   },
-  {
-    name: "Create URL",
-    icon: Link2,
-    path: "/dashboard/create",
-  },
+  
   {
     name: "My URLs",
     icon: Link2,

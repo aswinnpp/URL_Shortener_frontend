@@ -18,18 +18,25 @@ export default function AuthInitializer({
 
   useEffect(() => {
     const initialize = async () => {
+      console.log("Initialize started");
+  
       try {
-        const response =
-          await authService.refreshToken();
-
+        const response = await authService.refreshToken();
+  
+        console.log("Refresh success", response);
+  
         dispatch(loginSuccess(response.user));
-      } catch {
+      } catch (error) {
+        console.log("Refresh failed", error);
+  
         dispatch(logoutSuccess());
       } finally {
+        console.log("Setting ready");
+  
         setReady(true);
       }
     };
-
+  
     initialize();
   }, [dispatch]);
 

@@ -17,3 +17,11 @@ export interface CreateUrlRequest {
     clicks: number;
     createdAt: string;
   }
+
+  export interface Url {
+    id: string;
+    originalUrl: string;
+    shortUrl: string;
+    clicks: number;
+    createdAt: string;
+  }

@@ -15,6 +15,7 @@ export const API_ENDPOINTS = {
   URL: {
     CREATE: "/url",
     GET_ALL: "/url",
+    UPDATE: "/url",
     ANALYTICS: (id: string) => `/url/analytics/${id}`,
   },
 } as const;

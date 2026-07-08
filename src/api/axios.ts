@@ -3,7 +3,10 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 
-import { API_BASE_URL, API_ENDPOINTS } from "@/constants/api";
+import {
+  API_BASE_URL,
+  API_ENDPOINTS,
+} from "@/constants/api";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -48,9 +51,22 @@ axiosInstance.interceptors.response.use(
         })
       | undefined;
 
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
+
+    // Don't try to refresh the auth endpoints themselves
+    if (
+      originalRequest.url ===
+        API_ENDPOINTS.AUTH.REFRESH_TOKEN ||
+      originalRequest.url ===
+        API_ENDPOINTS.AUTH.LOGIN
+    ) {
+      return Promise.reject(error);
+    }
+
     if (
       error.response?.status !== 401 ||
-      !originalRequest ||
       originalRequest._retry
     ) {
       return Promise.reject(error);
@@ -61,7 +77,10 @@ axiosInstance.interceptors.response.use(
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
         failedQueue.push({
-          resolve: () => resolve(axiosInstance(originalRequest)),
+          resolve: () =>
+            resolve(
+              axiosInstance(originalRequest)
+            ),
           reject,
         });
       });

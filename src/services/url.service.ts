@@ -1,11 +1,12 @@
 import axiosInstance from "@/api/axios";
 
 import { API_ENDPOINTS } from "@/constants/api";
-
+import {
+  type CreateUrlFormData,
+} from "@/validation/url.schema";
 import {
   CreateUrlRequest,
   CreateUrlResponse,
-  UrlItem
 } from "@/types/url";
 
 export const urlService = {
@@ -21,11 +22,21 @@ export const urlService = {
     return response.data;
   },
 
-  getMyUrls: async (): Promise<UrlItem[]> => {
-    const response =
-      await axiosInstance.get<UrlItem[]>(
-        API_ENDPOINTS.URL.GET_ALL
-      );
+  getMyUrls: async (
+    page = 1,
+    limit = 3,
+    search = ""
+  ) => {
+    const response = await axiosInstance.get(
+      API_ENDPOINTS.URL.GET_ALL,
+      {
+        params: {
+          page,
+          limit,
+          search,
+        },
+      }
+    );
   
     return response.data;
   },
@@ -37,6 +48,19 @@ export const urlService = {
       await axiosInstance.delete(
         `/url/${id}`
       );
+  
+    return response.data;
+  },
+
+
+  updateUrl: async (
+    id: string,
+    data: CreateUrlFormData
+  ) => {
+    const response = await axiosInstance.patch(
+      `${API_ENDPOINTS.URL.UPDATE}/${id}`,
+      data
+    );
   
     return response.data;
   },
