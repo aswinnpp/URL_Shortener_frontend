@@ -14,8 +14,7 @@ export const API_ENDPOINTS = {
 
   URL: {
     CREATE: "/url",
-    MY_URLS: "/url/my-urls",
-    DELETE: (id: string) => `/url/${id}`,
+    GET_ALL: "/url",
     ANALYTICS: (id: string) => `/url/analytics/${id}`,
   },
 } as const;

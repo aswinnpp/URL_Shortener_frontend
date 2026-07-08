@@ -10,6 +10,11 @@ import Dashboard from "@/pages/Dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
+import DashboardLayout from "@/layouts/DashboardLayout";
+
+import CreateUrl from "@/pages/Url/CreateUrl";
+import MyUrls from "@/pages/Url/MyUrls";
+
 export const router = createBrowserRouter([
   {
     element: <PublicRoute />,
@@ -37,12 +42,25 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    element: <ProtectedRoute />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/dashboard",
         element: <Dashboard />,
       },
+      {
+        path: "/dashboard/create",
+        element: <CreateUrl />,
+      },
+      {
+        path: "/dashboard/my-urls",
+        element: <MyUrls />,
+      },
+      
     ],
   },
   {

@@ -1,8 +1,22 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { ReactNode } from "react";
+
 import { useAppSelector } from "@/store/hooks";
 
-export default function ProtectedRoute() {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+interface ProtectedRouteProps {
+  children?: ReactNode;
+}
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+export default function ProtectedRoute({
+  children,
+}: ProtectedRouteProps) {
+  const { isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children ? <>{children}</> : <Outlet />;
 }
