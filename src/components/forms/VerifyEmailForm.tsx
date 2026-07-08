@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +24,8 @@ export default function VerifyEmailForm() {
   const email = searchParams.get("email") ?? "";
 
   const [loading, setLoading] = useState(false);
+  const [countdown, setCountdown] = useState(60);
+  const [resending, setResending] = useState(false);
 
   const {
     register,
@@ -51,7 +53,7 @@ export default function VerifyEmailForm() {
     } catch (error: any) {
       toast.error(
         error?.response?.data?.message ??
-          "Verification failed"
+        "Verification failed"
       );
     } finally {
       setLoading(false);
@@ -60,17 +62,34 @@ export default function VerifyEmailForm() {
 
   const resendOtp = async () => {
     try {
+      setResending(true);
+
       const response =
         await authService.resendOtp(email);
 
       toast.success(response.message);
+
+      setCountdown(60);
     } catch (error: any) {
       toast.error(
         error?.response?.data?.message ??
-          "Failed to resend OTP"
+        "Failed to resend OTP"
       );
+    } finally {
+      setResending(false);
     }
   };
+
+
+  useEffect(() => {
+    if (countdown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   return (
     <AuthLayout
@@ -98,20 +117,40 @@ export default function VerifyEmailForm() {
         </div>
 
         <Button
+          type="submit"
+          className="w-full"
+          disabled={loading}
+        >
+          {loading ? "Verifying..." : "Verify Email"}
+        </Button>
+        <Button
+          type="submit"
           className="w-full"
           disabled={loading}
         >
           {loading ? "Verifying..." : "Verify Email"}
         </Button>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={resendOtp}
-        >
-          Resend OTP
-        </Button>
+        <div className="text-center">
+          {countdown > 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Resend OTP in{" "}
+              <span className="font-semibold">
+                00:{countdown.toString().padStart(2, "0")}
+              </span>
+            </p>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              disabled={resending}
+              onClick={resendOtp}
+            >
+              {resending ? "Sending..." : "Resend OTP"}
+            </Button>
+          )}
+        </div>
       </form>
     </AuthLayout>
   );

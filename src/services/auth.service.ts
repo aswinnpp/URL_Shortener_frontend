@@ -11,6 +11,8 @@ import {
   ResetPasswordRequest,
   VerifyEmailRequest,
   VerifyEmailResponse,
+  ForgotPasswordResponse,
+  ResetPasswordResponse,
 } from "@/types/auth";
 
 export const authService = {
@@ -61,21 +63,27 @@ export const authService = {
     return response.data;
   },
 
-  forgotPassword: async (data: ForgotPasswordRequest) => {
-    const response = await axiosInstance.post(
-      API_ENDPOINTS.AUTH.FORGOT_PASSWORD,
-      data
-    );
-
+  forgotPassword: async (
+    data: ForgotPasswordRequest
+  ): Promise<ForgotPasswordResponse> => {
+    const response =
+      await axiosInstance.post<ForgotPasswordResponse>(
+        API_ENDPOINTS.AUTH.FORGOT_PASSWORD,
+        data
+      );
+  
     return response.data;
   },
 
-  resetPassword: async (data: ResetPasswordRequest) => {
-    const response = await axiosInstance.post(
-      API_ENDPOINTS.AUTH.RESET_PASSWORD,
-      data
-    );
-
+  resetPassword: async (
+    data: ResetPasswordRequest
+  ): Promise<ResetPasswordResponse> => {
+    const response =
+      await axiosInstance.post<ResetPasswordResponse>(
+        API_ENDPOINTS.AUTH.RESET_PASSWORD,
+        data
+      );
+  
     return response.data;
   },
 
