@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
 import { loginSchema, LoginFormData } from "@/validation/auth.schema";
 import { authService } from "@/services/auth.service";
-import { useAppDispatch } from "@/store/hooks";
 import { useAuthenticate } from "@/hooks/useAuthenticate";
 import GoogleAuthButton from "@/components/ui/GoogleAuthButton";
 import { Button } from "@/components/ui/button";

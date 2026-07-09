@@ -102,4 +102,18 @@ export const authService = {
 
     return response.data;
   },
+
+  googleAuth: async (
+    idToken: string
+  ): Promise<AuthResponse> => {
+    const response =
+      await axiosInstance.post<AuthResponse>(
+        API_ENDPOINTS.AUTH.GOOGLE,
+        {
+          idToken,
+        }
+      );
+  
+    return response.data;
+  },
 };
