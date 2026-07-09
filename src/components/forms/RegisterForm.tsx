@@ -13,6 +13,7 @@ import {
   registerSchema,
   RegisterFormData,
 } from "@/validation/register.schema";
+import GoogleAuthButton from "@/components/ui/GoogleAuthButton";
 
 import { authService } from "@/services/auth.service";
 
@@ -67,67 +68,67 @@ export default function RegisterForm() {
       >
         <div>
           <Label>Name</Label>
-
+  
           <Input
             placeholder="Enter your name"
             {...register("name")}
           />
-
+  
           {errors.name && (
             <p className="text-sm text-red-500">
               {errors.name.message}
             </p>
           )}
         </div>
-
+  
         <div>
           <Label>Email</Label>
-
+  
           <Input
             type="email"
             placeholder="Enter your email"
             {...register("email")}
           />
-
+  
           {errors.email && (
             <p className="text-sm text-red-500">
               {errors.email.message}
             </p>
           )}
         </div>
-
+  
         <div>
           <Label>Password</Label>
-
+  
           <Input
             type="password"
             placeholder="Password"
             {...register("password")}
           />
-
+  
           {errors.password && (
             <p className="text-sm text-red-500">
               {errors.password.message}
             </p>
           )}
         </div>
-
+  
         <div>
           <Label>Confirm Password</Label>
-
+  
           <Input
             type="password"
             placeholder="Confirm password"
             {...register("confirmPassword")}
           />
-
+  
           {errors.confirmPassword && (
             <p className="text-sm text-red-500">
               {errors.confirmPassword.message}
             </p>
           )}
         </div>
-
+  
         <Button
           className="w-full"
           disabled={loading}
@@ -137,7 +138,23 @@ export default function RegisterForm() {
             ? "Creating Account..."
             : "Register"}
         </Button>
-
+  
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+  
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+  
+        {/* Google Register/Login */}
+        <GoogleAuthButton />
+  
         <p className="text-center text-sm">
           Already have an account?{" "}
           <Link

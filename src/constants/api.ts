@@ -10,12 +10,14 @@ export const API_ENDPOINTS = {
     RESET_PASSWORD: "/auth/reset-password",
     REFRESH_TOKEN: "/auth/refresh-token",
     LOGOUT: "/auth/logout",
+    GOOGLE: "/auth/google",
   },
 
   URL: {
     CREATE: "/url",
     GET_ALL: "/url",
     UPDATE: "/url",
+    
     ANALYTICS: (id: string) => `/url/analytics/${id}`,
   },
 } as const;
