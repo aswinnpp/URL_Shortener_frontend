@@ -21,7 +21,7 @@ export function useMyUrls() {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
       setPage(1); // Reset to first page when searching
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [search]);
