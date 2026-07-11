@@ -9,10 +9,22 @@ export function useMyUrls() {
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
+
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(1); // Reset to first page when searching
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const fetchUrls = async () => {
     try {
@@ -21,11 +33,8 @@ export function useMyUrls() {
       const response = await urlService.getMyUrls(
         page,
         3,
-        search
+        debouncedSearch
       );
-
-      console.log("ss",response);
-      
 
       setUrls(response.data);
       setTotal(response.pagination.total);
@@ -39,7 +48,7 @@ export function useMyUrls() {
 
   useEffect(() => {
     fetchUrls();
-  }, [page, search]);
+  }, [page, debouncedSearch]);
 
   return {
     urls,
@@ -56,6 +65,4 @@ export function useMyUrls() {
 
     refetch: fetchUrls,
   };
-
-  
 }
