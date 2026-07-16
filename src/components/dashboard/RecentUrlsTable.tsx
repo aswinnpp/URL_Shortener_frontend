@@ -20,6 +20,7 @@ export default function RecentUrlsTable({
     <Table>
       <TableHeader>
         <TableRow>
+          <TableHead>Name</TableHead>
           <TableHead>Original URL</TableHead>
           <TableHead>Clicks</TableHead>
         </TableRow>
@@ -28,6 +29,12 @@ export default function RecentUrlsTable({
       <TableBody>
         {urls.map((url) => (
           <TableRow key={url.id}>
+            <TableCell className="max-w-[150px]">
+              <span className="block truncate" title={url.name}>
+                {url.name}
+              </span>
+            </TableCell>
+
             <TableCell className="max-w-sm truncate">
               {url.originalUrl}
             </TableCell>

@@ -20,7 +20,7 @@ export function useMyUrls() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
-      setPage(1); // Reset to first page when searching
+      setPage(1); 
     }, 1000);
 
     return () => clearTimeout(timer);

@@ -61,12 +61,11 @@ export default function MyUrlsTable() {
     totalPages,
   } = useMyUrls();
 
-  
-console.log(totalPages);
-
   const [open, setOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
 
   const [editOpen, setEditOpen] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const [editingUrl, setEditingUrl] =
     useState<Url | null>(null);
@@ -81,8 +80,6 @@ console.log(totalPages);
   } = useForm<CreateUrlFormData>({
     resolver: zodResolver(createUrlSchema),
   });
-
-
 
   // ---------------- Edit Form ----------------
 
@@ -99,6 +96,7 @@ console.log(totalPages);
     data: CreateUrlFormData
   ) => {
     try {
+      setCreating(true);
       await urlService.create(data);
 
       toast.success("Short URL created.");
@@ -113,6 +111,8 @@ console.log(totalPages);
         error?.response?.data?.message ??
         "Failed to create URL."
       );
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -120,6 +120,7 @@ console.log(totalPages);
     setEditingUrl(url);
 
     resetEdit({
+      name: url.name,
       originalUrl: url.originalUrl,
     });
 
@@ -132,6 +133,7 @@ console.log(totalPages);
     if (!editingUrl) return;
 
     try {
+      setUpdating(true);
       await urlService.updateUrl(
         editingUrl.id,
         data
@@ -149,6 +151,8 @@ console.log(totalPages);
         error?.response?.data?.message ??
         "Update failed."
       );
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -159,11 +163,9 @@ console.log(totalPages);
       toast.success("URL deleted successfully.");
       if (urls.length === 1 && page > 1) {
         setPage(page - 1);
-      }else{
- refetch();
+      } else {
+        refetch();
       }
-
-     
     } catch (error: any) {
       toast.error(
         error?.response?.data?.message ??
@@ -202,7 +204,7 @@ console.log(totalPages);
             open={open}
             onOpenChange={setOpen}
           >
-            <DialogTrigger >
+            <DialogTrigger>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
                 New URL
@@ -231,7 +233,25 @@ console.log(totalPages);
                 className="space-y-4"
               >
                 <div>
-                  <Label>Original URL</Label>
+                  <Label>URL Name *</Label>
+
+                  <Input
+                    placeholder="Portfolio"
+                    {...register("name")}
+                  />
+
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {
+                        errors.name
+                          .message
+                      }
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label>Original URL *</Label>
 
                   <Input
                     placeholder="https://example.com"
@@ -251,9 +271,10 @@ console.log(totalPages);
                 <Button
                   type="submit"
                   className="w-full"
+                  disabled={creating}
                 >
                   <Link2 className="mr-2 h-4 w-4" />
-                  Create URL
+                  {creating ? "Creating..." : "Create URL"}
                 </Button>
               </form>
             </DialogContent>
@@ -278,6 +299,10 @@ console.log(totalPages);
                 <TableHeader>
                   <TableRow>
                     <TableHead>
+                      Name
+                    </TableHead>
+
+                    <TableHead>
                       Short URL
                     </TableHead>
 
@@ -301,6 +326,15 @@ console.log(totalPages);
                       key={url.id}
                       className="hover:bg-muted/50 transition-colors"
                     >
+                      <TableCell className="max-w-[200px]">
+                        <span
+                          className="block truncate"
+                          title={url.name}
+                        >
+                          {url.name}
+                        </span>
+                      </TableCell>
+
                       <TableCell>
                         <a
                           href={url.shortUrl}
@@ -375,29 +409,28 @@ console.log(totalPages);
               </Table>
 
               {totalPages > 1 && (
-  <div className="mt-6 flex items-center justify-between">
-    <Button
-      variant="outline"
-      disabled={page === 1}
-      onClick={() => setPage(page - 1)}
-    >
-      Previous
-    </Button>
+                <div className="mt-6 flex items-center justify-between">
+                  <Button
+                    variant="outline"
+                    disabled={page === 1}
+                    onClick={() => setPage(page - 1)}
+                  >
+                    Previous
+                  </Button>
 
-    <span className="text-sm text-muted-foreground">
-      Page {page} of {totalPages}
-    </span>
+                  <span className="text-sm text-muted-foreground">
+                    Page {page} of {totalPages}
+                  </span>
 
-    <Button
-      variant="outline"
-      disabled={page === totalPages}
-      onClick={() => setPage(page + 1)}
-    >
-      Next
-    </Button>
-  </div>
-)}
-              
+                  <Button
+                    variant="outline"
+                    disabled={page === totalPages}
+                    onClick={() => setPage(page + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </CardContent>
@@ -412,7 +445,7 @@ console.log(totalPages);
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Edit URL
+              Edit Short URL
             </DialogTitle>
           </DialogHeader>
 
@@ -423,7 +456,26 @@ console.log(totalPages);
             className="space-y-4"
           >
             <div>
-              <Label>Original URL</Label>
+              <Label>URL Name *</Label>
+
+              <Input
+                {...registerEdit(
+                  "name"
+                )}
+              />
+
+              {editErrors.name && (
+                <p className="text-sm text-red-500">
+                  {
+                    editErrors.name
+                      .message
+                  }
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label>Original URL *</Label>
 
               <Input
                 {...registerEdit(
@@ -444,8 +496,9 @@ console.log(totalPages);
             <Button
               type="submit"
               className="w-full"
+              disabled={updating}
             >
-              Save Changes
+              {updating ? "Saving..." : "Save Changes"}
             </Button>
           </form>
         </DialogContent>

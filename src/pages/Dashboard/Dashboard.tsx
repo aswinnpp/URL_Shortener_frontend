@@ -67,7 +67,11 @@ export default function Dashboard() {
             Most Clicked URL
           </h2>
 
-          <p className="break-all">
+          <p className="font-medium">
+            {mostClicked.name}
+          </p>
+
+          <p className="mt-1 break-all text-sm text-gray-500">
             {mostClicked.originalUrl}
           </p>
 
